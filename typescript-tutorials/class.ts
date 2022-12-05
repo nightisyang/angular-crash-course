@@ -1,14 +1,27 @@
-class Employee {
+import { Login, User } from "./interface";
+
+interface Address {
+  name: string;
+  age: number;
+  id: number;
+  email: string;
+}
+
+class Employee implements Login {
   // variable declaraction
   #id: number;
   protected name: string;
   address: string;
 
-  // use constructure to parameterize variables
+  // use constructure to parameterize variables¡
   constructor(id: number, name: string, address: string) {
     this.address = address;
     this.#id = id;
     this.name = name;
+  }
+
+  login(): User {
+    throw new Error("Method not implemented.");
   }
 
   get empId(): number {
