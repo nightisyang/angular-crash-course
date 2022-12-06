@@ -1,0 +1,17 @@
+p {
+  display: flex;
+  background-color: pink;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  justify-content: center;
+}
+
+.even {
+  background-color: steelblue;
+  color: white;
+}
+
+.odd {
+  background-color: rgb(147, 145, 145);
+  color: white;
+}

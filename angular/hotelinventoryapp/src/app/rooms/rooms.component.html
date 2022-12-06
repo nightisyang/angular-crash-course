@@ -1,0 +1,37 @@
+<!-- <p>Welcome to {{ hotelName }}</p> -->
+
+<app-header></app-header>
+<app-header></app-header>
+<app-header></app-header>
+<app-header></app-header>
+<app-header></app-header>
+
+<div [hidden]="hideRoom">
+  Number of Rooms: Is this inline. /n/n No
+  <div
+    [ngStyle]="{ color: rooms.availableRooms > 0 ? 'green' : 'red' }"
+    [innerText]="numberOfRooms"
+  ></div>
+  <!-- document.getElementbyId('numberOfRooms').innerText = numberOfRooms; -->
+</div>
+
+{{ rooms.availableRooms ? "Rooms available" : "No rooms" }}
+
+<!-- {{ roomList | json }} -->
+<div *ngIf="selectedRoom">
+  {{ selectedRoom | json }}
+</div>
+
+<div>
+  <button class="btn btn-primary" (click)="addRoom()">Add Room</button>
+</div>
+
+<div *ngIf="hideRoom">
+  <app-rooms-list
+    [rooms]="roomList"
+    [title]="title"
+    (selectedRoom)="selectRoom($event)"
+  ></app-rooms-list>
+</div>
+
+<button (click)="toggle()">Toggle</button>
