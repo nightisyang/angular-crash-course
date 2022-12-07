@@ -5,11 +5,13 @@ import {
   DoCheck,
   OnInit,
   QueryList,
+  SkipSelf,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { Room, RoomList } from './rooms';
+import { RoomsService } from './service/rooms.service';
 
 @Component({
   selector: 'app-rooms',
@@ -19,14 +21,8 @@ import { Room, RoomList } from './rooms';
 export class RoomsComponent
   implements OnInit, DoCheck, AfterViewInit, AfterViewChecked
 {
-  // should not have any logic code
-  constructor() {}
-
-  @ViewChild(HeaderComponent)
-  headerComponent!: HeaderComponent;
-
-  @ViewChildren(HeaderComponent)
-  headerChildrenComponent!: QueryList<HeaderComponent>;
+  // constructor should not have any logic code
+  constructor(@SkipSelf() private roomsService: RoomsService) {}
 
   hotelName = 'Hotel California';
   numberOfRooms: number = 20;
@@ -34,6 +30,16 @@ export class RoomsComponent
   roomList: RoomList[] = [];
   selectedRoom!: RoomList;
   title = 'Room List';
+
+  @ViewChild(HeaderComponent)
+  headerComponent!: HeaderComponent;
+
+  @ViewChildren(HeaderComponent)
+  headerChildrenComponent!: QueryList<HeaderComponent>;
+
+  // don't declare service manually - anti-pattern
+  // do it in constructor
+  // roomService = new RoomsService();
 
   rooms: Room = {
     totalRooms: 20,
@@ -46,50 +52,10 @@ export class RoomsComponent
     this.title = 'Rooms List';
   }
 
-  // where the logic should be written, API call
+  // where the logic should be written, API calls etc etc, placed in a service
   ngOnInit(): void {
-    this.roomList = [
-      {
-        roomNumber: 1,
-        roomType: 'Deluxe Room',
-        amenities: 'Air Conditioner, Free Wi-Fi, TV, Bathroom, Kitchen',
-        price: 500,
-        photos: '',
-        checkinTime: new Date('11-Nov-2021'),
-        checkoutTime: new Date('12-Nov-2021'),
-        rating: 4.1,
-      },
-      {
-        roomNumber: 2,
-        roomType: 'Regular Room',
-        amenities: 'Air Conditioner, Bathroom, Kitchen',
-        price: 300,
-        photos: '',
-        checkinTime: new Date('11-Nov-2021'),
-        checkoutTime: new Date('12-Nov-2021'),
-        rating: 4.2,
-      },
-      {
-        roomNumber: 3,
-        roomType: 'Deluxe Room',
-        amenities: 'Air Conditioner, Free Wi-Fi, TV, Kitchen',
-        price: 200,
-        photos: '',
-        checkinTime: new Date('11-Nov-2021'),
-        checkoutTime: new Date('12-Nov-2021'),
-        rating: 3.5,
-      },
-      {
-        roomNumber: 4,
-        roomType: 'Deluxe Room',
-        amenities: 'Air Conditioner, Free Wi-Fi, TV, Bathroom',
-        price: 100,
-        photos: '',
-        checkinTime: new Date('11-Nov-2021'),
-        checkoutTime: new Date('12-Nov-2021'),
-        rating: 4.2,
-      },
-    ];
+    this.roomsService.getRooms().subscribe((rooms) => (this.roomList = rooms));
+
     // only returns a value if component is static
     // console.log(this.headerComponent);
   }
@@ -109,7 +75,7 @@ export class RoomsComponent
 
   addRoom() {
     const room: RoomList = {
-      roomNumber: 4,
+      roomNumber: '4',
       roomType: 'Deluxe Room',
       amenities: 'Everythinggggg',
       price: 2000,
